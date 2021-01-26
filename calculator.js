@@ -42,14 +42,25 @@ function receive(result,_element){
         i=0;
         }
 }
-function giveReceive(element,_operator){
+function giveReceive(element,_operator,_sign){
         if(bn!=result){
-        bn=Number(bn.join(""))
+            bn=Number(bn.join(""))
         }
         an=Number(an.join(""))
-        result=operate(_operator,bn,an)
-        element.textContent=`=${operate(_operator,bn,an)}`
-        display.appendChild(element)    
+        if(an!=0){
+            result=Math.round((operate(_operator,bn,an))*10)/10
+            element.textContent=`${result}${_sign}`
+            display.appendChild(element)    
+        }
+        else if(an==0){
+            element.textContent=`no`
+            display.appendChild(element)    
+        }
+}
+function remove(){
+    while(display.firstChild){
+        display.removeChild(display.lastChild)
+    }
 }
 let btn=document.querySelectorAll("button");
 let display=document.querySelector("#display")
@@ -66,7 +77,8 @@ for (let c=0;c<btn.length;c++){
                 receive(result,element);
             }
             else if(bn.length>0 || bn>0 && an.length>0){
-                giveReceive(element,count)
+                remove();
+                giveReceive(element,count,"+")
                 receive(result,element)
                 count="add"
             }
@@ -81,7 +93,8 @@ for (let c=0;c<btn.length;c++){
                 receive(result,element);
             }
             else if(bn.length>0 || bn>0 && an.length>0){
-                giveReceive(element,count)
+                remove();
+                giveReceive(element,count,"-")
                 receive(result,element)
                 count="subtract"
             }
@@ -96,7 +109,8 @@ for (let c=0;c<btn.length;c++){
                 receive(result,element);
             }
             else if(bn.length>0 || bn>0 && an.length>0){
-                giveReceive(element,count)
+                remove();
+                giveReceive(element,count,"*")
                 receive(result,element)
                 count="multiply"
             }
@@ -111,7 +125,8 @@ for (let c=0;c<btn.length;c++){
                 receive(result,element);
             }
             else if(bn.length>0 || bn>0 && an.length>0){
-                giveReceive(element,count)
+                remove();
+                giveReceive(element,count,"/")
                 receive(result,element)
                 count="divide"
             }
@@ -128,7 +143,8 @@ for (let c=0;c<btn.length;c++){
         }
         else if(c==15){
             if(count!=null){
-            giveReceive(element,count)
+            remove();
+            giveReceive(element,count,"")
             count=null;
             bn=[];
             finished=1;
