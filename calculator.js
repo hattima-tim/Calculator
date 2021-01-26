@@ -1,66 +1,153 @@
-function add(a,b){
-    return a+b;
+function add(a,c){
+    return a+c;
 }
-function multiply(a,b){
-    return a*b;
+function multiply(a,c){
+    return a*c;
 }
-function subtract(a,b){
-    return a-b;
+function subtract(a,c){
+    return a-c;
 }
-function divide(a,b){
-    return a/b;
+function divide(a,c){
+    return a/c;
 }
-function operate(operator,a,b){
+function operate(operator,a,c){
     if (operator=="add"){
-        return add(a,b);
+        return add(a,c);
     }
     else if (operator=="multiply"){
-        return multiply(a,b);
+        return multiply(a,c);
     }
     else if (operator=="subtract"){
-        return subtract(a,b);
+        return subtract(a,c);
     }
     else if(operator=="divide"){
-        return divide(a,b);
+        return divide(a,c);
     }
+}
+let an=[];
+let bn=[];
+let i=0;
+let result='';
+let count=null;
+let finished=0;
+function receive(result,_element){
+    if(result>0){
+        bn=result;
+        an=[]
+        i=0;
+        }
+        else {
+        bn=an;
+        an=[]
+        i=0;
+        }
+}
+function giveReceive(element,_operator){
+        if(bn!=result){
+        bn=Number(bn.join(""))
+        }
+        an=Number(an.join(""))
+        result=operate(_operator,bn,an)
+        element.textContent=`=${operate(_operator,bn,an)}`
+        display.appendChild(element)    
 }
 let btn=document.querySelectorAll("button");
 let display=document.querySelector("#display")
-/*let btn1=document.querySelector("#btn-1");
-btn1.addEventListener('click',()=>{
-    let element=document.createElement('p');
-    element.textContent="1"
-    display.appendChild(element)
-})*/
-btn.forEach((item,index)=>{
-    item.addEventListener('click',()=>{
+for (let c=0;c<btn.length;c++){                
+    btn[c].addEventListener('click',()=>{
         let element=document.createElement('p');
-        if (index==10){
-        element.textContent=`+`
-        display.appendChild(element)
+        if (c==10){
+            element.textContent="+"
+            display.appendChild(element)
+            if(count==null){
+                count="add";
+            }
+            if(bn.length==0){
+                receive(result,element);
+            }
+            else if(bn.length>0 || bn>0 && an.length>0){
+                giveReceive(element,count)
+                receive(result,element)
+                count="add"
+            }
         }
-        else if (index==11){
-        element.textContent=`-`
-        display.appendChild(element)        
+        else if (c==11){
+            element.textContent=`-`
+            display.appendChild(element)
+            if(count==null){
+                count="subtract"
+            }
+            if(bn.length==0){
+                receive(result,element);
+            }
+            else if(bn.length>0 || bn>0 && an.length>0){
+                giveReceive(element,count)
+                receive(result,element)
+                count="subtract"
+            }
+}        
+        else if(c==12){
+            element.textContent=`*`
+            display.appendChild(element)
+            if(count==null){
+                count="multiply"
+            }
+            if(bn.length==0){
+                receive(result,element);
+            }
+            else if(bn.length>0 || bn>0 && an.length>0){
+                giveReceive(element,count)
+                receive(result,element)
+                count="multiply"
+            }
+    }
+        else if(c==13){
+            element.textContent=`/`
+            display.appendChild(element)
+            if(count==null){
+                count="divide"
+            }
+            if(bn.length==0){
+                receive(result,element);
+            }
+            else if(bn.length>0 || bn>0 && an.length>0){
+                giveReceive(element,count)
+                receive(result,element)
+                count="divide"
+            }
         }
-        else if(index==12){
-        element.textContent=`*`
-        display.appendChild(element)
+        else if(c==14){
+            while(display.firstChild){
+                display.removeChild(display.lastChild)
+            }
+            an=[];
+            bn=[];
+            result=0;
+            count=null;
+            i=0;
         }
-        else if(index==13){
-        element.textContent=`/`
-        display.appendChild(element)    
-        }
-        else if(index==14){
-            /*put something*/ 
-        }
-        else if(index==15){
-            /*put something*/
+        else if(c==15){
+            if(count!=null){
+            giveReceive(element,count)
+            count=null;
+            bn=[];
+            finished=1;
+            }
         }
         else {
-        element.textContent=`${index}`
-        display.appendChild(element)
+        if (finished==1 && count==null){
+            while(display.firstChild){
+                display.removeChild(display.lastChild)
+            }
+            an=[];
+            bn=[];
+            finished=0;
+            result=0;
         }
-
-    })    
-})
+        element.textContent=`${c}`
+        display.appendChild(element)
+        an[i]=c;
+        i++;    
+    }
+    })
+}
