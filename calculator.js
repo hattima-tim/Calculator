@@ -1,169 +1,165 @@
-function add(a,c){
-    return a+c;
+function add(a,b){
+    return a+b;
 }
-function multiply(a,c){
-    return a*c;
+function multiply(a,b){
+    return a*b;
 }
-function subtract(a,c){
-    return a-c;
+function subtract(a,b){
+    return a-b;
 }
-function divide(a,c){
-    return a/c;
+function divide(a,b){
+    return a/b;
 }
-function operate(operator,a,c){
-    if (operator=="add"){
-        return add(a,c);
+function operate(operator,a,b){
+    if (operator=="addition"){
+        return add(a,b);
     }
-    else if (operator=="multiply"){
-        return multiply(a,c);
+    else if (operator=="multiplication"){
+        return multiply(a,b);
     }
-    else if (operator=="subtract"){
-        return subtract(a,c);
+    else if (operator=="subtraction"){
+        return subtract(a,b);
     }
-    else if(operator=="divide"){
-        return divide(a,c);
+    else if(operator=="division"){
+        return divide(a,b);
     }
 }
-let an=[];
-let bn=[];
-let i=0;
+let lastNumber=[];
+let firstNumber=[];
+let indexOf_last_number=0;
 let result='';
-let count=null;
-let finished=0;
-function receive(result,_element){
-    if(result>0){
-        bn=result;
-        an=[]
-        i=0;
+let selected_operator=null;
+let assignment_operator_press_count=0;
+function getNewNumber(result,_element){
+    if(result>0 || result<0){
+        firstNumber=result;
+        lastNumber=[]
+        indexOf_last_number=0;
         }
         else {
-        bn=an;
-        an=[]
-        i=0;
+        firstNumber=lastNumber;
+        lastNumber=[]
+        indexOf_last_number=0;
         }
 }
-function giveReceive(element,_operator,_sign){
-        if(bn!=result){
-            bn=Number(bn.join(""))
+function doCalculation(display_text_element,_operator,_operatorSign){
+        if(firstNumber!=result){
+            firstNumber=Number(firstNumber.join(""))
         }
-        an=Number(an.join(""))
-        if(an!=0){
-            result=Math.round((operate(_operator,bn,an))*10)/10
-            element.textContent=`${result}${_sign}`
-            display.appendChild(element)    
+        lastNumber=Number(lastNumber.join(""))
+        if(lastNumber!=0){
+            result=Math.round((operate(_operator,firstNumber,lastNumber))*100)/100;
+            display_text_element.textContent=`${result}${_operatorSign}`
+            display.appendChild(display_text_element)    
         }
-        else if(an==0){
-            element.textContent=`no`
-            display.appendChild(element)    
+        else if(lastNumber==0){
+            display_text_element.textContent=`No!don't do this!`
+            display.appendChild(display_text_element)    
         }
 }
-function remove(){
+function remove_display_text(){
     while(display.firstChild){
         display.removeChild(display.lastChild)
     }
 }
+function clearAllData(){
+    remove_display_text();
+    lastNumber=[];
+    firstNumber=[];
+    result=0;
+    selected_operator=null;
+    assignment_operator_press_count=0;
+    indexOf_last_number=0;
+}
 let btn=document.querySelectorAll("button");
 let display=document.querySelector("#display")
-for (let c=0;c<btn.length;c++){                
-    btn[c].addEventListener('click',()=>{
-        let element=document.createElement('p');
-        if (c==10){
-            element.textContent="+"
-            display.appendChild(element)
-            if(count==null){
-                count="add";
+for (let i=0;i<btn.length;i++){                
+    btn[i].addEventListener('click',()=>{
+        let display_text_element=document.createElement('p');
+        if (i==10){
+            display_text_element.textContent="+"
+            display.appendChild(display_text_element)
+            if(selected_operator==null){
+                selected_operator="addition";
             }
-            if(bn.length==0){
-                receive(result,element);
+            if(firstNumber.length==0){
+                getNewNumber(result,display_text_element);
             }
-            else if(bn.length>0 || bn>0 && an.length>0){
-                remove();
-                giveReceive(element,count,"+")
-                receive(result,element)
-                count="add"
+            else if(firstNumber.length>0 || firstNumber>0 ||firstNumber<0 && lastNumber.length>0){
+                remove_display_text();
+                doCalculation(display_text_element,selected_operator,"+")
+                getNewNumber(result,display_text_element)
+                selected_operator="addition"
             }
         }
-        else if (c==11){
-            element.textContent=`-`
-            display.appendChild(element)
-            if(count==null){
-                count="subtract"
+        else if (i==11){
+            display_text_element.textContent=`-`
+            display.appendChild(display_text_element)
+            if(selected_operator==null){
+                selected_operator="subtraction"
             }
-            if(bn.length==0){
-                receive(result,element);
+            if(firstNumber.length==0){
+                getNewNumber(result,display_text_element);
             }
-            else if(bn.length>0 || bn>0 && an.length>0){
-                remove();
-                giveReceive(element,count,"-")
-                receive(result,element)
-                count="subtract"
+            else if(firstNumber.length>0 || firstNumber>0 ||firstNumber<0 && lastNumber.length>0){
+                remove_display_text();
+                doCalculation(display_text_element,selected_operator,"-")
+                getNewNumber(result,display_text_element)
+                selected_operator="subtraction"
             }
 }        
-        else if(c==12){
-            element.textContent=`*`
-            display.appendChild(element)
-            if(count==null){
-                count="multiply"
+        else if(i==12){
+            display_text_element.textContent=`*`
+            display.appendChild(display_text_element)
+            if(selected_operator==null){
+                selected_operator="multiplication"
             }
-            if(bn.length==0){
-                receive(result,element);
+            if(firstNumber.length==0){
+                getNewNumber(result,display_text_element);
             }
-            else if(bn.length>0 || bn>0 && an.length>0){
-                remove();
-                giveReceive(element,count,"*")
-                receive(result,element)
-                count="multiply"
+            else if(firstNumber.length>0 || firstNumber>0 ||firstNumber<0 && lastNumber.length>0){
+                remove_display_text();
+                doCalculation(display_text_element,selected_operator,"*")
+                getNewNumber(result,display_text_element)
+                selected_operator="multiplication"
             }
     }
-        else if(c==13){
-            element.textContent=`/`
-            display.appendChild(element)
-            if(count==null){
-                count="divide"
+        else if(i==13){
+            display_text_element.textContent=`/`
+            display.appendChild(display_text_element)
+            if(selected_operator==null){
+                selected_operator="division"
             }
-            if(bn.length==0){
-                receive(result,element);
+            if(firstNumber.length==0){
+                getNewNumber(result,display_text_element);
             }
-            else if(bn.length>0 || bn>0 && an.length>0){
-                remove();
-                giveReceive(element,count,"/")
-                receive(result,element)
-                count="divide"
+            else if(firstNumber.length>0 || firstNumber>0 ||firstNumber<0 && lastNumber.length>0){
+                remove_display_text();
+                doCalculation(display_text_element,selected_operator,"/")
+                getNewNumber(result,display_text_element)
+                selected_operator="division"
             }
         }
-        else if(c==14){
-            while(display.firstChild){
-                display.removeChild(display.lastChild)
-            }
-            an=[];
-            bn=[];
-            result=0;
-            count=null;
-            i=0;
+        else if(i==14){
+            clearAllData();
         }
-        else if(c==15){
-            if(count!=null){
-            remove();
-            giveReceive(element,count,"")
-            count=null;
-            bn=[];
-            finished=1;
+        else if(i==15){
+            if(selected_operator!=null){
+            remove_display_text();
+            doCalculation(display_text_element,selected_operator,"")
+            selected_operator=null;
+            firstNumber=[];
+            assignment_operator_press_count=1;
             }
         }
         else {
-        if (finished==1 && count==null){
-            while(display.firstChild){
-                display.removeChild(display.lastChild)
-            }
-            an=[];
-            bn=[];
-            finished=0;
-            result=0;
+        if (assignment_operator_press_count==1 && selected_operator==null){
+            clearAllData();
         }
-        element.textContent=`${c}`
-        display.appendChild(element)
-        an[i]=c;
-        i++;    
+        display_text_element.textContent=`${i}`
+        display.appendChild(display_text_element)
+        lastNumber[indexOf_last_number]=i;
+        indexOf_last_number++;    
     }
     })
 }
